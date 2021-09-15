@@ -6,8 +6,16 @@ module.exports = {
     res.json(result);
   },
   async find(req, res) {
-    const result = await knex("personagens").where({ id: req.params.id });
-    res.json(result);
+    const personagem = await knex("personagens").where({ id: req.params.id });
+    if (req.query.filmes === "true") {
+      const filmes = await knex("filmes")
+        .join("elenco", "filmes.id", "elenco.filme_id")
+        .join("personagens", "elenco.personagem_id", "personagens.id")
+        .where({ "personagens.id": req.params.id })
+        .select("personagens.*");
+      personagem[0].filmes = filmes;
+    }
+    res.json(personagem[0]);
   },
   async getByFilme(req, res) {
     const result = await knex("personagens")
