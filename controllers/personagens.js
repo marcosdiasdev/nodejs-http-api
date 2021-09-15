@@ -9,6 +9,14 @@ module.exports = {
     const result = await knex("personagens").where({ id: req.params.id });
     res.json(result);
   },
+  async getByFilme(req, res) {
+    const result = await knex("personagens")
+      .join("elenco", "personagens.id", "elenco.personagem_id")
+      .join("filmes", "elenco.filme_id", "filmes.id")
+      .where({ "filmes.id": req.params.id })
+      .select("personagens.*");
+    res.json(result);
+  },
   async save(req, res) {
     const result = await knex("personagens").insert(req.body);
     res.json(result);

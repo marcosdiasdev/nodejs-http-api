@@ -13,9 +13,13 @@ router.delete("/personagens/:id", personagensController.delete);
 router.put("/personagens/:id", personagensController.update);
 
 router.get("/filmes", filmesController.getAll);
+router.get("/filmes/:id", filmesController.find);
 router.post("/filmes", filmesController.save);
 
 router.get("/elenco", elencoController.getAll);
 router.post("/elenco", elencoController.save);
+
+// Nested route -> Rota aninhada
+router.get("/filmes/:id/personagens", personagensController.getByFilme);
 
 module.exports = router;
